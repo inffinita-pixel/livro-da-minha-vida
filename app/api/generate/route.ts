@@ -74,15 +74,18 @@ Relatos:
 ${memories_text}
 `.trim();
 
-    const resp = await openai.responses.create({
-      model: "gpt-4.1-mini",
-      input: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: userPrompt },
-      ],
-    });
+   const resp = await openai.chat.completions.create({
+  model: "gpt-4o-mini",
+  messages: [
+    { role: "system", content: SYSTEM_PROMPT },
+    { role: "user", content: userPrompt },
+  ],
+});
 
-    const chapter = (resp.output_text ?? "").trim();
+
+   const chapter =
+  resp.choices?.[0]?.message?.content?.trim() || "";
+
 
     return Response.json({ chapter });
   } catch (err: any) {
